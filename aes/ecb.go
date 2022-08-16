@@ -5,7 +5,7 @@ import (
 )
 
 func EncryptECB(pad PaddingFunc, key, plaintext []byte) ([]byte, error) {
-	cipher, err := aes.NewCipher(key)
+	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
@@ -15,14 +15,14 @@ func EncryptECB(pad PaddingFunc, key, plaintext []byte) ([]byte, error) {
 	i := 0
 	for i < l {
 		j := i + aes.BlockSize
-		cipher.Encrypt(ciphertext[i:j], plaintext[i:j])
+		c.Encrypt(ciphertext[i:j], plaintext[i:j])
 		i = j
 	}
 	return ciphertext, nil
 }
 
 func DecryptECB(unpad PaddingFunc, key, ciphertext []byte) ([]byte, error) {
-	cipher, err := aes.NewCipher(key)
+	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func DecryptECB(unpad PaddingFunc, key, ciphertext []byte) ([]byte, error) {
 	i := 0
 	for i < l {
 		j := i + aes.BlockSize
-		cipher.Decrypt(plaintext[i:j], ciphertext[i:j])
+		c.Decrypt(plaintext[i:j], ciphertext[i:j])
 		i = j
 	}
 	plaintext = unpad(plaintext)
